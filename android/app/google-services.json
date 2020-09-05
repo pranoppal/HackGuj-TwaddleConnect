@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "645603465740",
+    "firebase_url": "https://twaddle-school.firebaseio.com",
+    "project_id": "twaddle-school",
+    "storage_bucket": "twaddle-school.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:645603465740:android:17e4bf75b747b15b80ec29",
+        "android_client_info": {
+          "package_name": "com.twaddle.schools"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "645603465740-0uqu3euqkeviqo8457au59mao5h66kpu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.twaddle.schools",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "645603465740-gvaqp606l2sskm8s7gccrdrobl6sfjoc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtQYYrlnBxnXbDktjXF92IMSzfJn28RoI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "645603465740-gvaqp606l2sskm8s7gccrdrobl6sfjoc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
