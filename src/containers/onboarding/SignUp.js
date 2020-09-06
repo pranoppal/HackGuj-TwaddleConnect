@@ -8,14 +8,13 @@ import React, {useState, useEffect} from 'react';
 import {useStoreState, useStoreActions} from 'easy-peasy';
 import {v5 as uuidv5} from 'uuid';
 // import {getBaseUrl} from '../../utils/Constants';
-import AsyncStorage from '@react-native-community/async-storage';
+
 import {TouchableRipple} from 'react-native-paper';
 
 export default function SignUp({navigation,route}) {
 
     const [isSigninInProgress, setSigninInProgress] = useState(false);
-    const {insertUser} = useStoreActions((actions) => actions.user);
-    const user = useStoreState((state) => state.user);
+    
     const userType = route.params.userType;
     // var userCopy;
     // var token;
@@ -31,17 +30,7 @@ export default function SignUp({navigation,route}) {
         });
     }, []);
 
-    // useEffect(() => {
-    //     async function navigateToBasicDetails() {
-    //         await AsyncStorage.setItem('token', token);
-    //         // await AsyncStorage.setItem('userId', user.user.uuid);
-    //         await AsyncStorage.setItem('userName', user.name);
-    //         await AsyncStorage.setItem('dp', user.dp);
-    //         await AsyncStorage.setItem('email', user.email);
-    //         navigation.navigate('BasicDetails');
-    //     }
-    //     if (user.id) navigateToBasicDetails();
-    // }, [user]);
+    
 
     async function signInGoogle() {
         try {
@@ -60,7 +49,7 @@ export default function SignUp({navigation,route}) {
             };
             // userCopy = user;
             // token = userInfo.idToken;
-            insertUser(user);
+            // insertUser(user);
 
             navigation.navigate('BasicDetails',{
                 userDetails: user,

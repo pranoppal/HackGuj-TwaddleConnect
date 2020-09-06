@@ -18,7 +18,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {TouchableRipple, Button} from 'react-native-paper';
 import {FAB} from 'react-native-paper';
-import {BarChart, Grid} from 'react-native-svg-charts';
+import {BarChart, Grid, PieChart} from 'react-native-svg-charts';
 
 export default function ExploreStudent({navigation}) {
     //   const {events} = useStoreState(state => state.events);
@@ -40,38 +40,25 @@ export default function ExploreStudent({navigation}) {
         setOverviewAnalyticsGraphVisible(!overviewAnalyticsGraphVisible);
     }
 
-    const fill = 'rgb(134, 65, 244)';
-    const data = [
-        50,
-        10,
-        40,
-        95,
-        -4,
-        -24,
-        null,
-        85,
-        undefined,
-        0,
-        35,
-        53,
-        -53,
-        24,
-        50,
-        -20,
-        -80,
-    ];
+    
+    const data = [50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80];
+    const randomColor = () => ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(0, 7);
+ 
+    const pieData = data
+        .filter((value) => value > 0)
+        .map((value, index) => ({
+            value,
+            svg: {
+                fill: randomColor(),
+                onPress: () => console.log('press', index),
+            },
+            key: `pie-${index}`,
+        }))
 
     const showOverviewGraph = () => {
         return overviewAnalyticsGraphVisible ? (
             <View style={{flex: 1,marginTop:24,borderTopWidth:1}}>
-                {/* <View style={{height:1,width:width*0.9,backgroundColor:'#000'}}/> */}
-                <BarChart
-                    style={{height: 200}}
-                    data={data}
-                    svg={{fill}}
-                    contentInset={{top: 30, bottom: 30}}>
-                    <Grid />
-                </BarChart>
+                <PieChart style={{ height: 200, }} data={pieData} />
                 <View>
                     <Button
                         icon="arrow-right"

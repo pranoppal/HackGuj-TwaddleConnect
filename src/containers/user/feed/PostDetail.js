@@ -18,44 +18,56 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {TouchableRipple} from 'react-native-paper';
 
-export default function PostDetail() {
-    //   const {events} = useStoreState(state => state.events);
-    //   const {getEvents} = useStoreActions(actions => actions.events);
+export default function PostDetail({navigation, route}) {
     const [isLoading, setLoading] = useState(false);
-    //   useEffect(() => {
-    //     getEvents();
-    //   }, []);
 
-    //   useEffect(() => {
-    //     if (!isEmpty(events)) setLoading(false);
-    //   }, [events]);
+    const post = route.params ? route.params.postDetail : null;
+
     return !isLoading ? (
         <ScrollView style={{flex: 1}}>
             <View style={styles.mainContainer}>
                 <View style={styles.headerDPNameContainer}>
-                    <View style={{flex: 1, justifyContent: 'center', flexDirection:'row',alignItems:'center'}}>
+                    <View
+                        style={{
+                            flex: 1,
+                            justifyContent: 'center',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                        }}>
                         <Image
-                            source={require('../../../../assets/student.png')}
+                            source={{uri: post.creator_details.dp}}
                             style={styles.dpStyle}
                         />
                     </View>
                     <View style={styles.headerNameContainer}>
-                        <Text style={styles.eventNameText}>Narendra Modi</Text>
-                        <Text style={{fontSize:12,marginVertical:-4}}>SVNIT Class 12</Text>
-                        <Text style={{fontSize:12}}>5h</Text>
+                        <Text style={styles.eventNameText}>
+                            {post.creator_details.first_name +
+                                ' ' +
+                                post.creator_details.last_name}
+                        </Text>
+                        <Text style={{fontSize: 12, marginVertical: -4}}>
+                            {post.creator_details.organisation_name}
+                        </Text>
+                        <Text style={{fontSize: 12}}>{post.created_at}</Text>
                     </View>
                 </View>
-                <View style={{flex: 4,marginVertical:8,}}>
+                <View style={{flex: 3, marginVertical: 8}}>
+                    <Text style={{fontSize: 16, marginHorizontal: 24}}>
+                        {post.content_text}
+                    </Text>
                     <Image
-                        source={require('../../../../assets/school.png')}
+                        source={{uri: post.content_image}}
                         style={styles.postImageStyle}
                     />
                 </View>
                 <View style={styles.divider}></View>
                 <View style={styles.footerLikeCommentShareContainer}>
                     <View style={styles.likeContainer}>
-                        <AntDesign name="like2" size={18} />
-                        <Text style={styles.eventDetailText}>Like</Text>
+                        <Image
+                            source={require('../../../../assets/clap.png')}
+                            style={{width: 18, height: 18}}
+                        />
+                        <Text style={styles.eventDetailText}>Clap</Text>
                     </View>
                     <TouchableRipple
                         onPress={() => {
@@ -75,17 +87,21 @@ export default function PostDetail() {
                     </View>
                 </View>
                 <View style={styles.divider}></View>
-                <View style={{flex: 14, flexDirection: 'column', width: width, marginVertical:8,}}>
+                <View
+                    style={{
+                        flex: 14,
+                        flexDirection: 'column',
+                        width: width,
+                        marginVertical: 8,
+                    }}>
                     <View style={{flexDirection: 'row'}}>
-                        <View
-                            style={styles.commentDPContainer}>
+                        <View style={styles.commentDPContainer}>
                             <Image
                                 source={require('../../../../assets/student.png')}
                                 style={styles.dpStyle}
                             />
                         </View>
-                        <View
-                            style={styles.commentBodyStyle}>
+                        <View style={styles.commentBodyStyle}>
                             <Text style={styles.eventNameText}>
                                 Narendra Modi
                             </Text>
@@ -113,21 +129,21 @@ export default function PostDetail() {
 
 const {width, height} = Dimensions.get('window');
 const styles = StyleSheet.create({
-    divider:{
-        borderWidth:1,
-        width:width,
-        height:1,
-        borderColor:'#a9a9a9',
-        marginVertical:1,
+    divider: {
+        borderWidth: 1,
+        width: width,
+        height: 1,
+        borderColor: '#a9a9a9',
+        marginVertical: 1,
     },
-    commentDPContainer:{
+    commentDPContainer: {
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'flex-start',
         marginStart: 12,
-        marginTop:8
+        marginTop: 8,
     },
-    commentBodyStyle:{
+    commentBodyStyle: {
         flex: 4.5,
         flexDirection: 'column',
         backgroundColor: '#D3D3D3',
@@ -154,7 +170,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginHorizontal: 24,
         alignItems: 'center',
-        marginVertical:8,
+        marginVertical: 8,
     },
     postImageStyle: {
         height: 180,
@@ -166,7 +182,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'flex-start',
         justifyContent: 'center',
-        marginHorizontal:8,
+        marginHorizontal: 8,
     },
     dpStyle: {
         height: 48,
@@ -199,7 +215,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#efeeee',
         alignItems: 'center',
         marginHorizontal: 8,
-        marginTop:16,
+        marginTop: 16,
     },
     activityIndicator: {
         position: 'absolute',

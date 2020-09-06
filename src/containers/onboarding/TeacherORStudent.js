@@ -19,7 +19,6 @@ export default function Splash({navigation}) {
                 <TouchableRipple
                     style={styles.buttonContainer}
                     onPress={() => {
-                        console.log('asdf');
                         navigation.navigate('SignUp',{
                             userType:'teacher',
                         });

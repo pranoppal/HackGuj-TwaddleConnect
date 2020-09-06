@@ -18,6 +18,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {TouchableRipple} from 'react-native-paper';
 import {FAB} from 'react-native-paper';
+import {BarChart, Grid, PieChart} from 'react-native-svg-charts';
 
 export default function UserHome({navigation}) {
     //   const {events} = useStoreState(state => state.events);
@@ -64,20 +65,34 @@ export default function UserHome({navigation}) {
         //   return cards;
         // } else return null;
     };
+
+    const data = [50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80];
+    const randomColor = () => ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(0, 7);
+ 
+    const pieData = data
+        .filter((value) => value > 0)
+        .map((value, index) => ({
+            value,
+            svg: {
+                fill: randomColor(),
+                onPress: () => console.log('press', index),
+            },
+            key: `pie-${index}`,
+        }))
+
+
+
     return !isLoading ? (
         <View style={{flex: 1}}>
             <Text style={styles.eventsTitleText}>Student Analytics</Text>
-            <ScrollView style={{flex: 1}}>
-                <View style={styles.mainContainer}>{showEventCards()}</View>
-            </ScrollView>
-            <FAB
-                style={styles.fab}
-                small
-                label="THE WORLD"
-                icon="repeat"
-                color="#fff"
-                onPress={() => navigation.navigate('ExploreAll')}
-            />
+            <View>
+            <PieChart style={{ height: 200, }} data={pieData} />
+            </View>
+            <View>
+                <ScrollView style={{flexGrow: 1}}>
+                    <View style={styles.mainContainer}>{showEventCards()}</View>
+                </ScrollView>
+            </View>
         </View>
     ) : (
         <View style={styles.mainContainer}>

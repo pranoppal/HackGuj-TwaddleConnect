@@ -6,95 +6,85 @@ import {
     ActivityIndicator,
     Image,
     ScrollView,
-    ImageBackground,
+    // ImageBackground,
     Dimensions,
 } from 'react-native';
 import {useStoreState, useStoreActions} from 'easy-peasy';
 import {isEmpty} from 'lodash-es';
-import Feather from 'react-native-vector-icons/Feather';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+// import Feather from 'react-native-vector-icons/Feather';
+// import EvilIcons from 'react-native-vector-icons/EvilIcons';
+// import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {TouchableRipple} from 'react-native-paper';
+import {call} from 'react-native-reanimated';
 
 export default function UserHome({navigation}) {
     const user = useStoreState((state) => state.user);
     const student = useStoreState((state) => state.student);
-    const {getPosts} = useStoreActions((actions) => actions.student);
+    const {getPosts,clapPost,delClap} = useStoreActions((actions) => actions.student);
 
     const [isLoading, setLoading] = useState(true);
 
-    //   useEffect(() => {
-    //     const payload = {
-    //         postBy:'student',
-    //         student_id:'adfads56f456fa',
-    //     }
-    //     // if(user.id){
-    //     //     getPosts(payload);
-    //     // }
-    //         getPosts(payload)
-    //   }, [user]);
+    useEffect(() => {
+        if (user && user.user && user.user.uuid) {
+            getPosts({
+                postBy: user.user.by,
+                userId: user.user.uuid,
+            });
+        }
+    }, [user]);
 
     useEffect(() => {
-        const payload = {
-            postBy: 'student',
-            student_id: 'adfads56f456fa',
-        };
-        getPosts(payload);
-        console.log('post leke aa');
-    }, []);
-    console.log('flkdsajflajkf');
-    useEffect(() => {
-        console.log('called', student);
-        if (student && student.posts) setLoading(false);
+        if (student && student.posts && !isEmpty(student.posts))
+            setLoading(false);
     }, [student]);
 
+    function handleClap(post) {
+        if(!post.clapped)
+            clapPost({pid:post.pid, userType:user.user.by, userId: user.user.uuid,});
+        if(post.clapped)
+        delClap({pid:post.pid, userType:user.user.by, userId: user.user.uuid,});
+        if (user && user.user && user.user.uuid) {
+            getPosts({
+                postBy: user.user.by,
+                userId: user.user.uuid,
+            });
+        }
+    }
+
     const showEventCards = () => {
-        // if (!isEmpty(events)) {
-        //   const cards = events.map((event, index) => {key={index}
         if (student && student.posts && !isEmpty(student.posts)) {
             const cards = student.posts.map((post, index) => {
+                let clapped = post.clapped;
                 return (
                     <View style={styles.cardContainer} key={index}>
-                        <View
-                            style={{
-                                flex: 1,
-                                flexDirection: 'row',
-                                marginHorizontal: 24,
-                                marginVertical: 12,
-                                justifyContent: 'center',
-                            }}>
+                        <View style={styles.headerDPNameContainer}>
                             <View style={{flex: 1, justifyContent: 'center'}}>
                                 <Image
-                                    source={require('../../../../assets/student.png')}
-                                    style={{
-                                        height: 48,
-                                        width: 48,
-                                        borderRadius: 24,
-                                    }}
+                                    source={{uri: post.creator_details.dp}}
+                                    style={styles.dpStyle}
                                 />
                             </View>
-                            <View
-                                style={{
-                                    flex: 4,
-                                    flexDirection: 'column',
-                                    alignItems: 'flex-start',
-                                    justifyContent: 'center',
-                                }}>
+                            <View style={styles.headerNameContainer}>
                                 <Text style={styles.eventNameText}>
-                                    Narendra Modi
+                                    {post.creator_details.first_name +
+                                        ' ' +
+                                        post.creator_details.last_name}
                                 </Text>
                                 <Text style={styles.eventClubText}>
-                                    SVNIT Class 12
+                                    {post.creator_details.organisation_name}
                                 </Text>
                             </View>
                         </View>
                         <View style={{flex: 3}}>
+                            <Text style={{fontSize: 16, marginHorizontal: 24}}>
+                                {post.content_text}
+                            </Text>
                             <Image
-                                source={require('../../../../assets/school.png')}
+                                source={{uri: post.content_image}}
                                 style={{
-                                    height: 180,
+                                    height: 10,
                                     width: width,
                                     borderRadius: 24,
                                 }}
@@ -102,24 +92,62 @@ export default function UserHome({navigation}) {
                         </View>
                         <View
                             style={{
-                                flex: 1,
+                                flex: 0.5,
                                 flexDirection: 'row',
                                 justifyContent: 'space-between',
-                                marginHorizontal: 24,
                                 alignItems: 'center',
+                                marginHorizontal: 24,
                             }}>
-                            <View
-                                style={{
-                                    flexDirection: 'row',
-                                    flex: 1,
-                                    alignItems: 'center',
-                                }}>
-                                <AntDesign name="like2" size={18} />
-                                <Text style={styles.eventDetailText}>Like</Text>
+                            <Text>
+                                {post.reactions ? post.reactions.length : 0}{' '}
+                                Claps
+                            </Text>
+                            <Text>
+                                {post.comments ? post.comments.length : 0}{' '}
+                                Comments
+                            </Text>
+                        </View>
+                        <View style={styles.footerLikeCommentShareContainer}>
+                            <View style={{flex: 1}}>
+                                {clapped ? (
+                                    <TouchableRipple
+                                        onPress={() => {
+                                            handleClap(post);
+                                        }}>
+                                        <View style={styles.clappedBg}>
+                                            <Image
+                                                source={require('../../../../assets/clap.png')}
+                                                style={{width: 18, height: 18}}
+                                            />
+                                            <Text
+                                                style={styles.eventDetailText}>
+                                                Clap
+                                            </Text>
+                                        </View>
+                                    </TouchableRipple>
+                                ) : (
+                                    <TouchableRipple
+                                        onPress={() => {
+                                            handleClap(post);
+                                        }}>
+                                        <View style={styles.unclappedBg}>
+                                            <Image
+                                                source={require('../../../../assets/clap.png')}
+                                                style={{width: 18, height: 18}}
+                                            />
+                                            <Text
+                                                style={styles.eventDetailText}>
+                                                Clap
+                                            </Text>
+                                        </View>
+                                    </TouchableRipple>
+                                )}
                             </View>
                             <TouchableRipple
                                 onPress={() => {
-                                    navigation.navigate('PostDetail');
+                                    navigation.navigate('PostDetail', {
+                                        postDetail: post,
+                                    });
                                 }}>
                                 <View style={styles.commentContainer}>
                                     <MaterialCommunityIcons
@@ -170,6 +198,54 @@ export default function UserHome({navigation}) {
 
 const {width, height} = Dimensions.get('window');
 const styles = StyleSheet.create({
+    unclappedBg: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    clappedBg: {
+        backgroundColor: '#5382fa',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent:'center',
+        borderRadius:10,
+        marginHorizontal:8,
+    },
+    footerLikeCommentShareContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginHorizontal: 24,
+        alignItems: 'center',
+        borderTopWidth: 1,
+        borderBottomWidth: 1,
+        marginVertical: 8,
+        paddingVertical: 4,
+        borderColor: '#a9a9a9',
+    },
+    headerNameContainer: {
+        flex: 4,
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        justifyContent: 'center',
+    },
+    dpStyle: {
+        height: 48,
+        width: 48,
+        borderRadius: 24,
+    },
+    headerDPNameContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        marginHorizontal: 24,
+        marginVertical: 12,
+        justifyContent: 'center',
+    },
+    divider: {
+        borderWidth: 1,
+        height: 1,
+        borderColor: '#a9a9a9',
+        marginVertical: 1,
+    },
     commentContainer: {
         flexDirection: 'row',
         flex: 1,
@@ -189,9 +265,7 @@ const styles = StyleSheet.create({
     },
     mainContainer: {
         flex: 2,
-        backgroundColor: '#efeeee',
         alignItems: 'center',
-        marginHorizontal: 24,
         marginVertical: 16,
     },
     activityIndicator: {
@@ -202,9 +276,8 @@ const styles = StyleSheet.create({
     cardContainer: {
         backgroundColor: '#fff',
         borderRadius: 12,
-        width: '100%',
-        height: 300,
-        marginBottom: 24,
+        flex: 1,
+        width: width * 0.9,
     },
     eventsTitleText: {
         fontSize: 24,

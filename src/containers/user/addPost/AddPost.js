@@ -103,7 +103,7 @@ export default function AddPost({navigation}) {
                     data={mockData}
                     onSelect={(data) => {}}
                     onRemoveItem={(data) => {}}
-                />
+                /> 
             </View>
             <View style={{flex: 3, marginVertical: 8}}>
                 <TextInput

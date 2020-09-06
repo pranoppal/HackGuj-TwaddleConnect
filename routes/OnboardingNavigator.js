@@ -8,16 +8,12 @@ const OnboardingStack = createStackNavigator();
 
 const OnboardingNavigator = ({navigation}) => (
     <OnboardingStack.Navigator screenOptions={{headerShown: false}}>
-        <OnboardingStack.Screen name="TeacherORStudent" component={TeacherORStudent} />
+        
+        <OnboardingStack.Screen
+            name="TeacherORStudent"
+            component={TeacherORStudent}
+        />
         <OnboardingStack.Screen name="SignUp" component={SignUp} />
-        {/* <OnboardingStack.Screen
-        name="Mobile"
-        component={Mobile}
-      />
-      <OnboardingStack.Screen
-        name="OTP"
-        component={OTP}
-        /> */}
         <OnboardingStack.Screen name="BasicDetails" component={BasicDetails} />
     </OnboardingStack.Navigator>
 );
