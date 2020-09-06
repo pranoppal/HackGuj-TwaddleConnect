@@ -2,6 +2,7 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import ExploreAll from '../src/containers/teacher/feed/ExploreAll'
 import ExploreStudent from '../src/containers/teacher/feed/ExploreStudent'
+import StudentAnalyticsTopBarNavigator from '../routes/StudentAnalyticsTopBarNavigator';
 
 const HomeStack = createStackNavigator();
 
@@ -15,7 +16,10 @@ const UserHomeNavigator = ({navigation}) => (
       name="ExploreStudent"
       component={ExploreStudent}
     />
-    
+    <HomeStack.Screen
+      name="StudentAnalyticsTopBarNavigator"
+      component={StudentAnalyticsTopBarNavigator}
+      />
   </HomeStack.Navigator>
 );
 

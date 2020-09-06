@@ -20,7 +20,9 @@ export default function Splash({navigation}) {
                     style={styles.buttonContainer}
                     onPress={() => {
                         console.log('asdf');
-                        navigation.navigate('TeacherBottomTabNavigator');
+                        navigation.navigate('SignUp',{
+                            userType:'teacher',
+                        });
                     }}>
                     <Text style={{color: '#ffffff'}}>Teacher</Text>
                 </TouchableRipple>
@@ -36,7 +38,9 @@ export default function Splash({navigation}) {
 
                 <TouchableRipple
                     style={styles.buttonContainer}
-                    onPress={() => navigation.navigate('BottomTabNavigator')}>
+                    onPress={() => navigation.navigate('SignUp',{
+                        userType:'student',
+                    })}>
                     <Text style={{color: '#ffffff'}}>Student</Text>
                 </TouchableRipple>
             </View>

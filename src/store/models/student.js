@@ -1,20 +1,28 @@
 import {thunk, action, persist} from 'easy-peasy';
-import {createPost} from '../../restApi';
+import {createPost as createPostAPI,getPosts as getPostsAPI} from '../../restApi';
 
 export default persist({
-    
- 
+    posts: {},
+
+    getPosts: thunk((actions, payload) => {
+        // posts:{};
+        return getPostsAPI(payload).then((details) => {
+            console.log("data response", details)
+            // details.posts = details.posts.slice(1, -1);
+            return actions.updatePosts(details);
+        });
+    }),
+
     createPost: thunk((actions, payload) => {
-        return createPost(payload).then((details) => {
-            return actions.updateDetails(details);
+        return createPostAPI(payload).then((details) => {
+            return actions.updatePosts(details);
         }); 
     }),
-    
-    updateDetails: action((state, payload) => {
-        
+  
+    updatePosts: action((state, payload) => {
         return {
             ...state,
-            ...payload,
+            posts: payload.posts,
         };
     }),
 });

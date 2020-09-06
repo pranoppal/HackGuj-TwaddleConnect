@@ -3,20 +3,24 @@ import {
     GoogleSigninButton,
     statusCodes,
 } from '@react-native-community/google-signin';
-import {View,Text, Dimensions} from 'react-native';
+import {View, Text, Dimensions, Image} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {useStoreState, useStoreActions} from 'easy-peasy';
 import {v5 as uuidv5} from 'uuid';
-import axios from 'axios';
 // import {getBaseUrl} from '../../utils/Constants';
 import AsyncStorage from '@react-native-community/async-storage';
+import {TouchableRipple} from 'react-native-paper';
 
-export default function SignUp({navigation}) {
+export default function SignUp({navigation,route}) {
+
     const [isSigninInProgress, setSigninInProgress] = useState(false);
     const {insertUser} = useStoreActions((actions) => actions.user);
     const user = useStoreState((state) => state.user);
-    var token;
+    const userType = route.params.userType;
+    // var userCopy;
+    // var token;
 
+    
     useEffect(() => {
         GoogleSignin.configure({
             // scopes: ['https://www.googleapis.com/auth/user.birthday.read'],
@@ -27,13 +31,17 @@ export default function SignUp({navigation}) {
         });
     }, []);
 
-    useEffect(() => {
-        async function navigateToBasicDetails() {
-            await AsyncStorage.setItem('token', token);
-            navigation.navigate('BasicDetails');
-        }
-        if (user.id) navigateToBasicDetails();
-    }, [user]);
+    // useEffect(() => {
+    //     async function navigateToBasicDetails() {
+    //         await AsyncStorage.setItem('token', token);
+    //         // await AsyncStorage.setItem('userId', user.user.uuid);
+    //         await AsyncStorage.setItem('userName', user.name);
+    //         await AsyncStorage.setItem('dp', user.dp);
+    //         await AsyncStorage.setItem('email', user.email);
+    //         navigation.navigate('BasicDetails');
+    //     }
+    //     if (user.id) navigateToBasicDetails();
+    // }, [user]);
 
     async function signInGoogle() {
         try {
@@ -47,11 +55,16 @@ export default function SignUp({navigation}) {
                 lastName: userInfo.user.familyName,
                 email: userInfo.user.email,
                 photo: userInfo.user.photo,
-                isTeacher: false,
+                userType: userType,
+                token: userInfo.idToken,
             };
+            // userCopy = user;
+            // token = userInfo.idToken;
             insertUser(user);
 
-            // navigation.navigate('BasicDetails');
+            navigation.navigate('BasicDetails',{
+                userDetails: user,
+            });
         } catch (error) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
                 console.log('user cancelled the login flow');
@@ -68,21 +81,54 @@ export default function SignUp({navigation}) {
 
     return (
         <View style={{flex: 1}}>
-            <View style={{flex: 1,justifyContent:'flex-end',alignItems:'center'}}>
-                <Text>Welcome to</Text>
-                <Text>Twaddle Connect</Text>
+            <View
+                style={{
+                    flex: 1,
+                    justifyContent: 'flex-end',
+                    alignItems: 'center',
+                }}>
+                <Text style={{fontSize: 36}}>Welcome to</Text>
+                <Text
+                    style={{
+                        fontSize: 36,
+                        fontFamily: 'RedHatDisplay-Regular',
+                        color: '#5382fa',
+                    }}>
+                    Twaddle Connect
+                </Text>
             </View>
             <View style={{flex: 1}} />
-            <View style={{flex: 1,justifyContent:'flex-start',alignItems:'center'}}>
-                <GoogleSigninButton
-                    style={{width: width*0.9, height: 48}}
-                    size={GoogleSigninButton.Size.Wide}
-                    color={GoogleSigninButton.Color.Dark}
-                    onPress={() => signInGoogle()}
-                />
+            <View
+                style={{
+                    flex: 1,
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                }}>
+                <TouchableRipple onPress={() => signInGoogle()}>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            width: width * 0.85,
+                            borderRadius: 10,
+                            height: 50,
+                            backgroundColor: '#5382fa',
+                            justifyContent: 'space-evenly',
+                            alignItems: 'center',
+                        }}>
+                        <Image
+                            source={require('../../../assets/GoogleIcon.png')}
+                            style={{width: 24, height: 24, marginEnd: -32}}
+                        />
+                        <Text style={{color: '#fff'}}>Sign in with Google</Text>
+                    </View>
+                </TouchableRipple>
+                <Text style={{fontSize:11,fontFamily:'Nunito-Regular',marginTop:24,}}>
+                    *By signing up, your are agreeing to our{' '}
+                    <Text style={{color: '#5382fa'}}>Privacy Policy</Text>
+                </Text>
             </View>
         </View>
     );
 }
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');

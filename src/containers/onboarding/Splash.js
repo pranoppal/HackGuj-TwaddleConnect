@@ -7,7 +7,7 @@ export default function Splash({navigation}) {
 
     useEffect(() => {
         setTimeout(() => {
-            navigation.navigate('BottomTabNavigator');
+            navigation.navigate('OnboardingNavigator');
             // if (user.userId) {
             //   navigation.navigate('BottomTabNavigator');
             // } else {

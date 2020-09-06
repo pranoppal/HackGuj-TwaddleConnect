@@ -62,7 +62,7 @@ export default function AddPost({navigation}) {
     function handleSubmitPost() {
         if (textInputContent.length == 0) return;
         const payload = {
-            userId: 'afjea4f54faesfaeaadsf',
+            userId: '89c49fd0-d8f9-5545-b8b9-feec93f8813b',
             contentText: textInputContent,
         };
         createPost(payload);

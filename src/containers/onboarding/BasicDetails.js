@@ -136,8 +136,7 @@ export default function BasicDetails({navigation}) {
                         Alert.alert('Modal has been closed.');
                     }}>
                     <View style={styles.centeredView}>
-                        <View
-                            style={styles.modalView}>
+                        <View style={styles.modalView}>
                             <TouchableRipple
                                 onPress={() => requestCameraPermission()}
                                 rippleColor="rgba(0, 0, 0, .32)">
@@ -165,8 +164,9 @@ export default function BasicDetails({navigation}) {
             <View style={{position: 'absolute', right: 0, top: 0}}>
                 <TouchableRipple
                     onPress={() => navigation.navigate('BottomTabNavigator')}
+                    style={{borderWidth:1,borderColor:'#5382fa',height:38,width:80,borderRadius:23,alignItems:'center',justifyContent:'center',margin:16,}}
                     rippleColor="rgba(0, 0, 0, .32)">
-                    <Text>SKIP{'>>'}</Text>
+                    <Text style={{color:'#5382fa'}}>SKIP{' >>'}</Text>
                 </TouchableRipple>
             </View>
             <View>
@@ -206,7 +206,7 @@ export default function BasicDetails({navigation}) {
                     size="large"
                     style={{flex: 1, alignSelf: 'center'}}
                     color="#ee6002"
-                />                
+                />
                 <Button
                     onPress={() => {
                         navigation.navigate('BottomTabNavigator');
@@ -214,7 +214,6 @@ export default function BasicDetails({navigation}) {
                     color="#5382FA">
                     Next
                 </Button>
-                
             </View>
         </View>
     );
@@ -251,7 +250,7 @@ const styles = StyleSheet.create({
         elevation: 5,
         width: width * 0.8,
         height: 180,
-        backgroundColor:"#ffffff",
+        backgroundColor: '#ffffff',
     },
     text: {
         fontSize: 16,

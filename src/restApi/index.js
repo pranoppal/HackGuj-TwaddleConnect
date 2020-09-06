@@ -13,7 +13,24 @@ export async function getEventsAPI() {
 
 export async function postInsertUserAPI(payload) {
     const user = payload;
-    const url =
+    let url;
+    if(user.userType === 'teacher'){
+        url =
+        baseUrl +
+        'api/educator_register?uuid=' +
+        user.uuid +
+        '&first_name=' +
+        user.firstName +
+        '&last_name=' +
+        user.lastName +
+        '&email_id=' +
+        user.email +
+        '&dp=' +
+        user.photo +
+        '&organisation_name=kendriya vidyalaya&classes=[2,3,4]';
+    }
+    else if(user.userType === 'student'){
+        url =
         baseUrl +
         'api/student_register?uuid=' +
         user.uuid +
@@ -25,7 +42,9 @@ export async function postInsertUserAPI(payload) {
         user.email +
         '&dp=' +
         user.photo +
-        '&organisation_name=kendriya vidyalaya';
+        '&organisation_name=kendriya vidyalaya&standard=7';
+    }
+    console.log('url',url)
     const res = await axios.post(url, {timeout: 1000});
     return res.data;
 }
@@ -34,8 +53,13 @@ export async function createPost(payload){
     const url = baseUrl + 'api/create_post?created_by=student&student_id='
     + payload.userId + '&content_text=' + payload.contentText + 
     '&classification=resource/article&tags=[art, drawing, sketching]&privacy_scope=[school, students]';
-    console.log('url', url);
+    console.log('url',url);
     const res = await axios.post(url, {timeout: 1000});
-    console.log('res',res.data)
+    return res.data;
+}
+
+export async function getPosts(payload){
+    const url = baseUrl + 'api/posts?by=student&student_id=adfads56f456fa';
+    const res = await axios.get(url, {timeout: 1000});
     return res.data;
 }
